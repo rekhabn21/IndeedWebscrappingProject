@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -38,6 +39,10 @@ import utils.Jobscrapper.XLutils;
 
 public class searchpage extends TestBaseJobScrapper {
 
+/**
+ * constructor- used to initiate webelements from Pagefactory
+ * @throws IOException
+ */
 	public searchpage() throws IOException {
 		super();
 		try {
@@ -47,31 +52,25 @@ public class searchpage extends TestBaseJobScrapper {
 		}
 	}
 
-	XLutils excelutils;
-
-	@FindBy(xpath = "//input[@id='text-input-what']")
-	@CacheLookup
+	//XLutils excelutils;
+	
+	// Webelements from Indeed page
+	@FindBy(xpath = "//input[@id='text-input-what']")	@CacheLookup
 	WebElement whatsearchbox;
 
-	@FindBy(xpath = "//input[@id='text-input-where']")
-	@CacheLookup
+	@FindBy(xpath = "//input[@id='text-input-where']")	@CacheLookup
 	WebElement wheresearchbox;
 
-	@FindBy(css = "button[type='submit']")
-	@CacheLookup
+	@FindBy(css = "button[type='submit']")	@CacheLookup
 	WebElement findjobsbtn;
-
-	// popupwindow
-	@FindBy(xpath = "//*[@id='popover-x']/button")
-	@CacheLookup
+	
+	@FindBy(xpath = "//*[@id='popover-x']/button")	@CacheLookup
 	WebElement popupbutton;
 
-	@FindBy(css = "button[aria-controls='filter-dateposted-menu']")
-	@CacheLookup
+	@FindBy(css = "button[aria-controls='filter-dateposted-menu']")	@CacheLookup
 	WebElement datepostedbtn;
 
-	@FindBy(xpath = "//ul[@id='filter-dateposted-menu']/li")
-	@CacheLookup
+	@FindBy(xpath = "//ul[@id='filter-dateposted-menu']/li")	@CacheLookup
 	List<WebElement> datepostedmenu;
 
 	@FindBy(xpath = "//ul[@id='filter-dateposted-menu']/li/a[contains(text(),'Last 24 hours')]")
@@ -105,7 +104,7 @@ public class searchpage extends TestBaseJobScrapper {
 	@FindBy(xpath = "//a[@aria-label='Next']")
 	List<WebElement> nextpage;
 
-	// pop-up alert
+	// pop-up alert // popupwindow
 	@FindBy(id = "popover-foreground")
 	WebElement popupwindow;
 
@@ -158,7 +157,7 @@ public class searchpage extends TestBaseJobScrapper {
 	 */
 
 	// ACTIONS--------------------------------------------------------------------
-
+	
 	public void whatsearchfunction() {
 		whatsearchbox.sendKeys("");
 		return;
@@ -200,7 +199,10 @@ public class searchpage extends TestBaseJobScrapper {
 
 // methods
 // --------------------------------------------------------------------------------------------
-
+/**
+ * TO  Use "Remote" as search criteria 
+ * @throws InterruptedException
+ */
 	public void WhereBox() throws InterruptedException {
 		wheresearchbox.sendKeys(Keys.CONTROL + "a");
 		wheresearchbox.sendKeys(Keys.DELETE);
@@ -208,6 +210,12 @@ public class searchpage extends TestBaseJobScrapper {
 	}
 
 	// search criteria// whattextbox
+	/**
+	 * Methods to search with  different keywords for job type
+	 * @throws InterruptedException
+	 */
+
+	//Api Testing job searchfunction
 	public void apisearchfunction() throws InterruptedException {
 		whatsearchbox.sendKeys(Keys.CONTROL + "a");
 		whatsearchbox.sendKeys(Keys.DELETE);
@@ -215,7 +223,8 @@ public class searchpage extends TestBaseJobScrapper {
 		WhereBox();
 		findjobsbtn.click();
 	}
-
+// restassured job search function
+	
 	public void restassuredsearchfunction() throws InterruptedException {
 		whatsearchbox.sendKeys(Keys.CONTROL + "a");
 		whatsearchbox.sendKeys(Keys.DELETE);
@@ -223,7 +232,7 @@ public class searchpage extends TestBaseJobScrapper {
 		WhereBox();
 		findjobsbtn.click();
 	}
-
+// Postman search function
 	public void postmansearchfunction() throws InterruptedException {
 		whatsearchbox.sendKeys(Keys.CONTROL + "a");
 		whatsearchbox.sendKeys(Keys.DELETE);
@@ -232,6 +241,8 @@ public class searchpage extends TestBaseJobScrapper {
 		findjobsbtn.click();
 	}
 
+//----------------------------------------------------------------------------------------------------	
+	
 // popuphandling
 	public void popuphandling() {
 		try {
@@ -241,8 +252,12 @@ public class searchpage extends TestBaseJobScrapper {
 		} catch (Exception ne) {
 		}
 	}
-
+//-----------------------------------------------------------------------------------------------------------	
 	// date posted selection dropdown
+	/**
+	 * Select from dropdown for jobs posted time
+	 * @throws InterruptedException
+	 */
 	public void Datepostedselection() throws InterruptedException {
 		datepostedbtn.click();
 		Actions Act = new Actions(driver);
@@ -255,9 +270,14 @@ public class searchpage extends TestBaseJobScrapper {
 		popuphandling();
 	}
 
-// --------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------
 
 	// pagination
+	/**
+	 * loop thru pages while next-page button is clicked and return the total pages of data available for this search
+	 * @return noofPages
+	 */
+	
 	public int pagination() {
 		int noofPages = 1;
 		int pagecounter = 0;
@@ -267,33 +287,44 @@ public class searchpage extends TestBaseJobScrapper {
 				nextpagebtn.click();
 				pagecounter++;
 				noofPages++;
-				// System.out.println(pagecounter);
 			}
 		} catch (Exception e) {
 			System.out.println(" End of page counter  " + pagecounter);
-			System.out.println("total pages   " + noofPages);
-
+			//System.out.println("total pages   " + noofPages);
 		}
+		System.out.println("total pages   " + noofPages);
 		return noofPages;
 	}
 
 	// go to page1
+	/**
+	 * after pagination, driver is on last page..... it has to start from page 1
+	 * @throws InterruptedException
+	 */
 	public void startonfirstpage() throws InterruptedException {
+
 		try {
+			
 			while (previouspagebtn.isDisplayed() == true) {
 				previouspagebtn.click();
 			}
 		} catch (Exception e) {
-			WebDriverWait wait = new WebDriverWait(driver, 15);
-			wait.until(ExpectedConditions.elementToBeClickable(pageonebtn)).click();
-			System.out.println("from page 1");// go to page one
-			Thread.sleep(1000);
+	        WebDriverWait wait = new WebDriverWait(driver, 15);
+	        wait.until(ExpectedConditions.elementToBeClickable(pageonebtn)).click();
+			System.out.println(" Starting from page 1");// go to page one
+			//Thread.sleep(1000);
 		}
 	}
 
-// --------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------------------------
 
 //currentdate to record webscrapping time
+	
+/**
+ * 
+ * @return time of scrapping from system
+ */
+	
 	public String currentdate() {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
@@ -301,6 +332,15 @@ public class searchpage extends TestBaseJobScrapper {
 		return dtf.format(now);
 	}
 
+	
+	
+	
+	//to get the number of jobcards in each page
+	/**
+	 * 
+	 * @return noofcardsperpage
+	 * @throws InterruptedException
+	 */
 	public int JobCards() throws InterruptedException {
 		int totcount = jobcards.size();
 		System.out.println( "Job cards in this page " +totcount);
@@ -315,15 +355,16 @@ public class searchpage extends TestBaseJobScrapper {
 		return postedtime.getText();
 	}
 
-//---------------------------------------------------------------------------------------		
-//data to csv files
+//-------------------------------------------------------------------------------------------------------		
+//data to csv files ---> added csv dependency in POM.xml
 
 	public void datacollectiontocsv(String SheetName, String keyword) throws IOException, InterruptedException {
-	
+		System.out.println("=== Entering datacollectiontocsv() ===");
 		FileWriter outputfile = new FileWriter(new File("indeedJobs" + keyword + ".csv"));
 		CSVWriter writer = new CSVWriter(outputfile);
 
-		// adding header to csv
+		// adding header to csv file
+		
 		String[] header = { "Job Category", " Company name", "Job Title", "Job Location", "Job URL", "Job posted Time",
 				"Job Scraped Time", "Job Description" };
 		writer.writeNext(header);
@@ -332,10 +373,14 @@ public class searchpage extends TestBaseJobScrapper {
 		int totalpages = pagination();
 		System.out.println("Total searchpages =  :" + totalpages);
 
-		// go to page
+		
+		// go to  firstpage--- if condition-->when noof pages is 1,avoids error throws
+			
 		if (totalpages > 1) {
 			startonfirstpage();
 		}
+		
+		
 		int rownum = 1;
 		for (int i = 1; i <= totalpages; i++) {
 			System.out.println("----- Page # " + (i) + "---------");
@@ -343,6 +388,7 @@ public class searchpage extends TestBaseJobScrapper {
 			// data from jobcards
 			int jobsperpage = JobCards();
 			String JobCategory = jobCategory.getText();
+			
 			// looping thru all jobcards
 			try {
 				for (int j = 0; j < jobsperpage; j++) {
@@ -353,22 +399,25 @@ public class searchpage extends TestBaseJobScrapper {
 					String CompanyName = companyName.get(j).getText();
 					String JobLocation = jobLocation.get(j).getText();
 					String JobURL = jobLink.get(j).getAttribute("href").toString();
-					String JobPostedDate = jobPostedDate.get(j).getAttribute("text");
+					//String JobPostedDate = jobPostedDate.get(j).getAttribute("text");
 					String timeofdatacollection = currentdate();
 
-					/*
-					 * jobcards.get(j).click(); iframeswitch(); Thread.sleep(2000); String Jobdesc=
-					 * JobDescription(); String jobPostedat = JobPostedTime();
-					 * //dataRows.add(JobDescription()); // }catch (Exception f) { //
-					 * System.out.println("iframe data not completed"); }
-					 */
+					
+					 jobcards.get(j).click(); 
+					 iframeswitch();
+					 // Thread.sleep(2000); 
+					 String Jobdesc=JobDescription();
+					 String jobPostedate = JobPostedTime();
+					  //dataRows.add(JobDescription());
+					 //System.out.println("iframe data not completed"); 
+				
 
-					String[] dataRows = { JobCategory, JobTitle, CompanyName, JobLocation, JobURL, JobPostedDate,
-							timeofdatacollection, "Jobdesc " };
+					String[] dataRows = { JobCategory, JobTitle, CompanyName, JobLocation, JobURL, jobPostedate,
+							timeofdatacollection, Jobdesc };
 					writer.writeNext(dataRows);
-					//driver.switchTo().defaultContent();
-					Thread.sleep(2000);
-					//System.out.println("Data collected from all jobcards");
+					driver.switchTo().defaultContent();
+					//Thread.sleep(1000);
+					
 				} // end of for loop for jobcards
 			} catch (Exception n) {
 			}
@@ -385,18 +434,19 @@ public class searchpage extends TestBaseJobScrapper {
 		}
 	}
 		writer.close();
-		
+		Thread.sleep(1000);
+		System.out.println("Enter all data to excel from CSV");
+
 		System.out.println("Job Search completed");
+		System.out.println("=== Leaving datacollectiontocsv() ===");
 	}
 
 //=====================================================================================================================================================================
-///>>>>>>>>>>>>>>. data to excel method 2>>>>>>>>>>>>>>>>>>>>>>
+///>>>>>>>>>>>>>>. data to excel method 1>>>>>>>>>>>>>>>>>>>>>>
 
 	public void jobsdatatoexcel(String SheetName,String keyword) throws IOException, InterruptedException {
 
 		ArrayList<Object[]> jobdata = new ArrayList<Object[]>();
-//String jobTitle = null,jobLocation= null,jobPostedDate= null,jobDescription= null,jobLink= null,companyName= null, jobType= null, category =null;
-//String[] header = {"Job Category"," Company name", "Job Title","Job Location","Job URL", "Job posted Time","Job Scraped Time","Job Description"};
 
 //pagination
 		int totalpages = pagination();
@@ -407,19 +457,23 @@ public class searchpage extends TestBaseJobScrapper {
 			startonfirstpage();
 		}
 
+		
+// loop thru pagination pages
+				
 		int rownum = 1;
+		
 		for (int i = 1; i <= totalpages; i++) {
-			System.out.println("----- Page # " + (i) + "---------");
+			System.out.println("----- Page # " + (i) + "---------");// print page number
 
-// data from jobcards
+			// data from jobcards
 			int jobsperpage = JobCards();
-
-// looping thru all jobcards 
+			String JobCategory = jobCategory.getText();
+		// looping thru all jobcards 
 			try {
 				for (int j = 0; j < jobsperpage; j++) {
-					Thread.sleep(1000);
+					//Thread.sleep(1000);
 					// jobcards.get(j);
-					String JobCategory = jobCategory.getText();
+					
 					String JobTitle = jobTitle.get(j).getText();
 					// System.out.println( JobTitle);
 
@@ -432,31 +486,34 @@ public class searchpage extends TestBaseJobScrapper {
 					try {
 						jobcards.get(j).click();
 						iframeswitch();
-						Thread.sleep(1000);
-					} catch (Exception f) { // System.out.println("iframe data not completed");
+					//	Thread.sleep(1000);
+					} catch (Exception f) { 
+						 System.out.println("iframe data not completed");
 					}
 					String Jobdesc = JobDescription();
 					String jobPostedat = JobPostedTime();
-					// dataRows.add(JobDescription()); //
-
-					jobdata.add(new Object[] { JobCategory, JobTitle, CompanyName, JobLocation, JobURL, JobPostedDate,
-							timeofdatacollection, Jobdesc });
+					
+					jobdata.add(new Object[] { JobCategory, JobTitle, CompanyName, JobLocation, JobURL, JobPostedDate,	timeofdatacollection, Jobdesc });
 					Thread.sleep(1000);
 					driver.switchTo().defaultContent();
 
 				} // end of for loop for jobcards }
-			} catch (Exception n) {
-				System.out.println("Data collected from jobcards");
+				
+				} catch (Exception n) {
+				System.out.println(n);
 			}
+			
 			try {
-			if (nextpagebtn.isDisplayed() == true)			{
+				if (nextpagebtn.isDisplayed() == true)			{
 				nextpagebtn.click();
 				Thread.sleep(1000);
 				System.out.println("go to nextpage");
 			}
 		} catch (Exception e) {
+			System.out.println("End of pagination loop");
 		}
-		}
+		}// end of pagination for loop
+		
 		try {
 			System.out.println("---------Save to Excel-----------------");
 			// System.out.println(" jobdata" + jobdata.get(0));
@@ -467,59 +524,55 @@ public class searchpage extends TestBaseJobScrapper {
 			e.printStackTrace();
 		}
 		System.out.println("Job Search completed");
-			}// end of method
-
-	private void saveDataToExcel(ArrayList<Object[]> jobdatabase, String keyword) throws IOException {
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		String[] columnheadings = { "Job Category", " Company name", "Job Title", "Job Location", "Job URL",
-				"Job posted Time", "Job Scraped Time", "Job Description" };
-		XSSFSheet sheet = workbook.createSheet(keyword);
-
-		System.out.println("---------Start to export into Excel-----------------");
-		CellStyle style = workbook.createCellStyle();
-		style.setFillBackgroundColor(IndexedColors.BLUE.getIndex());
-
-		Row headerRow = sheet.createRow(0);
-
-		for (int i = 0; i < columnheadings.length; i++) {
-
-			Cell cell = headerRow.createCell(i);
-			cell.setCellValue((columnheadings[i]));
-			cell.setCellStyle(style);
-		}
-
-		int rownum = 1;
-		for (Object[] jlist : jobdatabase) {
-
-			XSSFRow row = sheet.createRow(rownum++);
-			int cellnum = 0;
-			for (Object value : jlist) {
-
-				XSSFCell cell = row.createCell(cellnum++);
-				cell.setCellValue((String) value);
-
 			}
-		}
-		File availableFile = new File("JobDetails.xlsx");
-		boolean exists = availableFile.exists();
-
-		if (exists) { // Checking file already exist,if yes then delete first and create again
-			availableFile.delete();
-		}
-		FileOutputStream fos = new FileOutputStream(availableFile);
-		workbook.write(fos);
-		fos.close();
-		workbook.close();
-
-	}
-
+	// end of method
 	
-	
-	
-
+					private void saveDataToExcel(ArrayList<Object[]> jobdatabase, String keyword) throws IOException {
+						XSSFWorkbook workbook = new XSSFWorkbook();
+						String[] columnheadings = { "Job Category", " Company name", "Job Title", "Job Location", "Job URL",
+								"Job posted Time", "Job Scraped Time", "Job Description" };
+						XSSFSheet sheet = workbook.createSheet(keyword);
+				
+						System.out.println("---------Start to export into Excel-----------------");
+						CellStyle style = workbook.createCellStyle();
+						style.setFillBackgroundColor(IndexedColors.BLUE.getIndex());
+				
+						Row headerRow = sheet.createRow(0);
+				
+						for (int i = 0; i < columnheadings.length; i++) {
+				
+							Cell cell = headerRow.createCell(i);
+							cell.setCellValue((columnheadings[i]));
+							cell.setCellStyle(style);
+						}
+				
+						int rownum = 1;
+						for (Object[] jlist : jobdatabase) {
+				
+							XSSFRow row = sheet.createRow(rownum++);
+							int cellnum = 0;
+							for (Object value : jlist) {
+				
+								XSSFCell cell = row.createCell(cellnum++);
+								cell.setCellValue((String) value);
+				
+							}
+						}
+						File availableFile = new File("JobDetails.xlsx");
+						boolean exists = availableFile.exists();
+				
+						if (exists) { // Checking file already exist,if yes then delete first and create again
+							availableFile.delete();
+						}
+						FileOutputStream fos = new FileOutputStream(availableFile);
+						workbook.write(fos);
+						fos.close();
+						workbook.close();
+				
+					}
 	//==================================================================================================================================================================
 	/*
-	 * /// >>>>>>>>>>>>>>. data to excel method 1>>>>>>>>>>>>>>>>>>>>>>
+	 * /// >>>>>>>>>>>>>>. data to excel method 2>>>>>>>>>>>>>>>>>>>>>>
 	 * 
 	 * public void jobsdatascrapping(String SheetName, String keyword) throws
 	 * IOException, InterruptedException {

@@ -7,7 +7,7 @@
         <methods>
           <include name="beforeTest"/>
           <include name="afterTest"/>
-          <include name="apiJobSearch"/>
+          <include name="restassuredJobSearch"/>
         </methods>
       </class> <!-- jobscrapper.testcases.newtest -->
     </classes>

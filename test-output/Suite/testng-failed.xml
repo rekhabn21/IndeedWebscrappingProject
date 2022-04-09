@@ -10,8 +10,7 @@
         <methods>
           <include name="beforeTest"/>
           <include name="afterTest"/>
-          <include name="restassuredJobSearch"/>
-          <include name="postmanJobSearch"/>
+          <include name="apiJobSearch"/>
         </methods>
       </class> <!-- jobscrapper.testcases.newtest -->
     </classes>
