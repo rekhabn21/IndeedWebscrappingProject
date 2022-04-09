@@ -1,4 +1,4 @@
-package utils.Jobscrapper;
+package com.qa.jobscrapperutils;
 
 
 import java.io.File;

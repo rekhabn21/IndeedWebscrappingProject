@@ -6,9 +6,9 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import pom.jobscrapper.searchpage;
-import utils.Jobscrapper.TestBaseJobScrapper;
-import utils.Jobscrapper.Testutils;
+import com.qa.jobscrapperpageobjects.searchpage;
+import com.qa.jobscrapperutils.TestBaseJobScrapper;
+import com.qa.jobscrapperutils.Testutils;
 
 public class newtest extends TestBaseJobScrapper {
 

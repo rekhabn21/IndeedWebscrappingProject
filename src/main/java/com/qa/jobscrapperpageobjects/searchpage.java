@@ -1,4 +1,4 @@
-package pom.jobscrapper;
+package com.qa.jobscrapperpageobjects;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,11 +31,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.opencsv.CSVWriter;
+import com.qa.jobscrapperutils.TestBaseJobScrapper;
+import com.qa.jobscrapperutils.Testutils;
+import com.qa.jobscrapperutils.XLutils;
 import com.relevantcodes.extentreports.utils.Writer;
-
-import utils.Jobscrapper.TestBaseJobScrapper;
-import utils.Jobscrapper.Testutils;
-import utils.Jobscrapper.XLutils;
 
 public class searchpage extends TestBaseJobScrapper {
 

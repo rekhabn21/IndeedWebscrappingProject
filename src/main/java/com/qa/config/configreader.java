@@ -1,4 +1,4 @@
-package Jobscrapperdemo;
+package com.qa.config;
 import java.util.*;
 import java.io.*;
 public class configreader {

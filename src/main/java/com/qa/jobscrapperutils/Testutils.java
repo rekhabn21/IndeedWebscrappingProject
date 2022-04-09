@@ -1,4 +1,4 @@
-package utils.Jobscrapper;
+package com.qa.jobscrapperutils;
 
 import org.openqa.selenium.support.ui.WebDriverWait;
 
